@@ -17,35 +17,330 @@ import plotly.graph_objects as go
 
 st.set_page_config(page_title="IB Analytics AI Readiness Tool", page_icon="🧠", layout="wide")
 
-# Add custom CSS for styling
+# Add custom CSS for professional styling
 st.markdown("""
 <style>
+    /* Import Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    /* Global Styles */
     .main {
-        background-color: #f8f9fa;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-family: 'Inter', sans-serif;
+        padding: 0;
+        margin: 0;
     }
+    
+    /* Header Styling */
+    .main-header {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        padding: 1.5rem 0;
+        border-radius: 0 0 15px 15px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        margin-bottom: 1rem;
+    }
+    
+    .header-content {
+        text-align: center;
+        color: white;
+    }
+    
+    .header-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .header-subtitle {
+        font-size: 1rem;
+        font-weight: 300;
+        opacity: 0.9;
+    }
+    
+    /* Sidebar Styling */
+    .css-1d391kg {
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        border-right: 3px solid #e2e8f0;
+        box-shadow: 4px 0 20px rgba(0,0,0,0.05);
+    }
+    
+    .sidebar-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem;
+        margin: -1rem -1rem 0.5rem -1rem;
+        border-radius: 0 0 12px 12px;
+        text-align: center;
+    }
+    
+    .sidebar-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    /* Tab Styling */
+    .stTabs [data-baseweb="tab-list"] {
+        background: rgba(255,255,255,0.95);
+        border-radius: 15px;
+        padding: 0.5rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        backdrop-filter: blur(10px);
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        background: transparent;
+        border-radius: 10px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin: 0 0.25rem;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        transform: translateY(-2px);
+    }
+    
+    .stTabs [data-baseweb="tab"]:hover {
+        background: rgba(102, 126, 234, 0.1);
+        transform: translateY(-1px);
+    }
+    
+    /* Button Styling */
     .stButton > button {
-        background-color: #007bff;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        font-weight: bold;
-        margin: 5px;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin: 8px 4px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
+    
     .stButton > button:hover {
-        background-color: #0056b3;
+        background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
     }
+    
+    .stButton > button:active {
+        transform: translateY(0px);
+        box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+    }
+    
+    /* Reset Button */
     .reset-button > button {
-        background-color: #dc3545;
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
         color: white;
         border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        font-weight: bold;
-        margin: 5px;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin: 8px 4px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
+    
     .reset-button > button:hover {
-        background-color: #c82333;
+        background: linear-gradient(135deg, #ff5252 0%, #e53935 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+    }
+    
+    /* Input Styling */
+    .stTextInput > div > div > input {
+        border-radius: 12px;
+        border: 2px solid #e2e8f0;
+        padding: 12px 16px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background: rgba(255,255,255,0.9);
+    }
+    
+    .stTextInput > div > div > input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        background: white;
+    }
+    
+    .stSelectbox > div > div {
+        border-radius: 12px;
+        border: 2px solid #e2e8f0;
+        background: rgba(255,255,255,0.9);
+    }
+    
+    .stTextArea > div > div > textarea {
+        border-radius: 12px;
+        border: 2px solid #e2e8f0;
+        padding: 12px 16px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background: rgba(255,255,255,0.9);
+    }
+    
+    .stTextArea > div > div > textarea:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        background: white;
+    }
+    
+    /* Radio Button Styling */
+    .stRadio > div {
+        background: rgba(255,255,255,0.9);
+        padding: 1rem;
+        border-radius: 12px;
+        border: 2px solid #e2e8f0;
+        margin: 0.5rem 0;
+        transition: all 0.3s ease;
+    }
+    
+    .stRadio > div:hover {
+        border-color: #667eea;
+        box-shadow: 0 2px 10px rgba(102, 126, 234, 0.1);
+    }
+    
+    /* Expander Styling */
+    .streamlit-expanderHeader {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        border-radius: 12px;
+        border: 2px solid #e2e8f0;
+        font-weight: 600;
+        padding: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .streamlit-expanderHeader:hover {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-color: #667eea;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    }
+    
+                /* Metric Styling */
+                .metric-container {
+                    background: rgba(255,255,255,0.95);
+                    padding: 0.75rem;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                    backdrop-filter: blur(10px);
+                    border: 1px solid rgba(255,255,255,0.2);
+                    margin: 0.25rem 0;
+                }
+    
+    /* Success/Error Messages */
+    .stSuccess {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border-radius: 12px;
+        padding: 1rem;
+        border: none;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+    
+    .stError {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        border-radius: 12px;
+        padding: 1rem;
+        border: none;
+        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+    }
+    
+    .stWarning {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: white;
+        border-radius: 12px;
+        padding: 1rem;
+        border: none;
+        box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+    }
+    
+    .stInfo {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        border-radius: 12px;
+        padding: 1rem;
+        border: none;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+    
+                /* Card Styling */
+                .assessment-card {
+                    background: rgba(255,255,255,0.95);
+                    border-radius: 12px;
+                    padding: 1rem;
+                    margin: 0.5rem 0;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+                    border: 1px solid rgba(255,255,255,0.2);
+                    backdrop-filter: blur(10px);
+                    transition: all 0.3s ease;
+                }
+    
+    .assessment-card:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+    }
+    
+    /* Progress Indicators */
+    .progress-bar {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        height: 8px;
+        border-radius: 4px;
+        margin: 1rem 0;
+        box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+    }
+    
+    /* Custom Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .fade-in-up {
+        animation: fadeInUp 0.6s ease-out;
+    }
+    
+    /* Hide Streamlit branding */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -206,12 +501,20 @@ def get_section_comments(section: str) -> str:
         for i, item in enumerate(st.session_state.get("infrastructure_saved", [])):
             if item.get("notes"):
                 comments.append(f"Question {i+1}: {item['notes']}")
-    elif section == "People":
+    elif section in ["People - AI Users", "People - AI Builders"]:
+        # Check both saved and current people surveys
         for survey in st.session_state.get("people_saved", []):
             if survey.get("notes"):
                 comments.append(f"{survey['name']} ({survey['type']}): {survey['notes']}")
+        for survey in st.session_state.get("people_surveys", []):
+            if survey.get("notes"):
+                comments.append(f"{survey['name']} ({survey['type']}): {survey['notes']}")
     elif section == "Leadership & Strategy":
+        # Check both saved and current leadership surveys
         for survey in st.session_state.get("leadership_saved", []):
+            if survey.get("notes"):
+                comments.append(f"{survey['name']} ({survey['role']}): {survey['notes']}")
+        for survey in st.session_state.get("leadership_surveys", []):
             if survey.get("notes"):
                 comments.append(f"{survey['name']} ({survey['role']}): {survey['notes']}")
     
@@ -441,12 +744,18 @@ if "people_saved" not in st.session_state:
 if "leadership_saved" not in st.session_state:
     st.session_state.leadership_saved = []
 
-# ---------------------- Sidebar ----------------------
+# ---------------------- Enhanced Sidebar ----------------------
 with st.sidebar:
-    st.title("🧠 AI Readiness Tool")
+    # Professional sidebar header
+    st.markdown("""
+    <div class="sidebar-header">
+        <h1 class="sidebar-title">🧠 AI Readiness Tool</h1>
+        <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">Enterprise Assessment Platform</p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Assessment Type Selection
-    st.subheader("📋 Assessment Type")
+    # Assessment Type Selection with enhanced styling
+    st.markdown("### 📋 Assessment Type")
     assessment_type = st.selectbox(
         "Choose Assessment Type",
         [
@@ -459,7 +768,8 @@ with st.sidebar:
             "Change Management Assessment",
             "Vendor Assessment"
         ],
-        index=0
+        index=0,
+        help="Select the type of AI readiness assessment to perform"
     )
     
     # Show sub-options for Technical Assessment
@@ -504,11 +814,29 @@ with st.sidebar:
     
     # Note: Data Management and AI Integration features are available in the main app tabs
 
-# ---------------------- Main App ----------------------
-st.title("🧠 IB Analytics — AI Readiness Tool")
+# ---------------------- Enhanced Main Header ----------------------
+st.markdown("""
+<div class="main-header">
+    <div class="header-content">
+        <h1 class="header-title">🧠 IB Analytics</h1>
+        <h2 class="header-subtitle">AI Readiness Assessment Platform</h2>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
-st.markdown("Assess your organization's readiness for AI implementation across key dimensions.")
-st.caption("Five modules: Onboarding → Data Readiness → Infrastructure → People → Leadership & Strategy → Results")
+# Professional description with enhanced styling
+st.markdown("""
+<div class="assessment-card fade-in-up">
+    <h3 style="color: #1e3c72; margin-bottom: 0.75rem; font-weight: 600;">🎯 Comprehensive AI Readiness Evaluation</h3>
+    <p style="font-size: 1rem; color: #4a5568; margin-bottom: 0.5rem;">
+        Assess your organization's readiness for AI implementation across key dimensions with our enterprise-grade assessment platform.
+    </p>
+    <div style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); height: 3px; border-radius: 2px; margin: 0.75rem 0;"></div>
+    <p style="color: #718096; font-size: 0.9rem; margin: 0;">
+        <strong>Five Assessment Modules:</strong> Onboarding → Data Readiness → Infrastructure → People → Leadership & Strategy → Results
+    </p>
+</div>
+""", unsafe_allow_html=True)
 
 # ---------------------- Onboarding Tab ----------------------
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
@@ -521,13 +849,33 @@ tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
 ])
 
 with tab1:
-    st.header("🏠 Onboarding")
+    st.markdown("""
+    <div class="assessment-card fade-in-up">
+        <h2 style="color: #1e3c72; margin-bottom: 1rem; font-weight: 600; display: flex; align-items: center;">
+            🏠 Onboarding Information
+        </h2>
+        <p style="color: #4a5568; margin-bottom: 1rem; font-size: 1rem;">
+            Provide your organization's basic information to begin the AI readiness assessment process.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Enhanced form with better styling
+    st.markdown('<div class="assessment-card fade-in-up">', unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     
     with col1:
-        st.session_state.onboarding["Company Name"] = st.text_input("Company Name", value=st.session_state.onboarding.get("Company Name", ""))
-        st.session_state.onboarding["Sector"] = st.selectbox("Sector", [
+        st.markdown("### 📝 Basic Information")
+        st.session_state.onboarding["Company Name"] = st.text_input(
+            "Company Name", 
+            value=st.session_state.onboarding.get("Company Name", ""),
+            placeholder="Enter your company name",
+            help="The official name of your organization"
+        )
+        st.session_state.onboarding["Sector"] = st.selectbox(
+            "Industry Sector", 
+            [
             "Banking/Finance",
             "Insurance", 
             "Retail",
@@ -537,29 +885,69 @@ with tab1:
             "Public Sector",
             "Technology",
             "Other"
-        ], index=0 if "Sector" not in st.session_state.onboarding else ["Banking/Finance", "Insurance", "Retail", "Manufacturing", "Healthcare", "Education", "Public Sector", "Technology", "Other"].index(st.session_state.onboarding["Sector"]))
-        st.session_state.onboarding["Phone"] = st.text_input("Phone Number", value=st.session_state.onboarding.get("Phone", ""))
+            ], 
+            index=0 if "Sector" not in st.session_state.onboarding else ["Banking/Finance", "Insurance", "Retail", "Manufacturing", "Healthcare", "Education", "Public Sector", "Technology", "Other"].index(st.session_state.onboarding["Sector"]),
+            help="Select your primary industry sector"
+        )
+        st.session_state.onboarding["Phone"] = st.text_input(
+            "Phone Number", 
+            value=st.session_state.onboarding.get("Phone", ""),
+            placeholder="+1 (555) 123-4567",
+            help="Primary contact phone number"
+        )
+        st.session_state.onboarding["Address"] = st.text_area(
+            "Business Address", 
+            value=st.session_state.onboarding.get("Address", ""), 
+            height=80,
+            placeholder="Enter your business address",
+            help="Primary business location address"
+        )
     
     with col2:
-        st.session_state.onboarding["Email"] = st.text_input("Email", value=st.session_state.onboarding.get("Email", ""))
-        st.session_state.onboarding["Address"] = st.text_area("Address", value=st.session_state.onboarding.get("Address", ""), height=80)
-        st.session_state.onboarding["Website"] = st.text_input("Website (optional)", value=st.session_state.onboarding.get("Website", ""))
+        st.markdown("### 📧 Contact Information")
+        st.session_state.onboarding["Email"] = st.text_input(
+            "Email Address", 
+            value=st.session_state.onboarding.get("Email", ""),
+            placeholder="contact@company.com",
+            help="Primary contact email address"
+        )
+        st.session_state.onboarding["Website"] = st.text_input(
+            "Website (Optional)", 
+            value=st.session_state.onboarding.get("Website", ""),
+            placeholder="https://www.company.com",
+            help="Company website URL"
+        )
     
-    st.text_area("General Notes (optional)", value=st.session_state.onboarding.get("onboarding_notes", ""), key="onboarding_notes", placeholder="Context, goals, constraints…")
+    st.markdown("### 📋 Additional Context")
+    st.text_area(
+        "General Notes (Optional)", 
+        value=st.session_state.onboarding.get("onboarding_notes", ""), 
+        key="onboarding_notes", 
+        placeholder="Provide any additional context, goals, constraints, or specific areas of focus for this AI readiness assessment...",
+        help="Share any relevant background information that might influence the assessment"
+    )
     
-    # Save and Reset buttons
-    st.divider()
-    col1, col2 = st.columns(2)
+    st.markdown('</div>', unsafe_allow_html=True)
     
-    with col1:
-        if st.button("💾 Save Onboarding Info", key="save_onboarding"):
+    # Enhanced Save and Reset buttons
+    st.markdown("""
+    <div style="margin: 1rem 0; padding: 1rem; background: rgba(255,255,255,0.95); border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+        <h4 style="color: #1e3c72; margin-bottom: 0.5rem; font-weight: 600;">💾 Save Your Progress</h4>
+        <p style="color: #4a5568; margin-bottom: 1rem; font-size: 0.9rem;">Save your onboarding information to continue with the assessment later.</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns([1, 1, 1])
+    
+    with col2:
+        if st.button("💾 Save Onboarding Info", key="save_onboarding", use_container_width=True):
             # Update onboarding notes in session state
             if "onboarding_notes" in st.session_state:
                 st.session_state.onboarding["onboarding_notes"] = st.session_state["onboarding_notes"]
-            st.success("Onboarding information saved!")
+            st.success("✅ Onboarding information saved successfully!")
     
-    with col2:
-        if st.button("🔄 Reset Onboarding", key="reset_onboarding"):
+    with col3:
+        if st.button("🔄 Reset Form", key="reset_onboarding", use_container_width=True):
             st.session_state.onboarding = {}
             if "onboarding_notes" in st.session_state:
                 del st.session_state["onboarding_notes"]
@@ -567,7 +955,20 @@ with tab1:
 
 # ---------------------- Data Readiness Tab ----------------------
 with tab2:
-    st.header("📊 Data Readiness")
+    st.markdown("""
+    <div class="assessment-card fade-in-up">
+        <h2 style="color: #1e3c72; margin-bottom: 1rem; font-weight: 600; display: flex; align-items: center;">
+            📊 Data Readiness Assessment
+        </h2>
+        <p style="color: #4a5568; margin-bottom: 0.75rem; font-size: 1rem;">
+            Evaluate your organization's data infrastructure, quality, governance, and AI readiness across 34 key dimensions.
+        </p>
+        <div style="background: linear-gradient(90deg, #10b981 0%, #059669 100%); height: 3px; border-radius: 2px; margin: 0.75rem 0;"></div>
+        <p style="color: #718096; font-size: 0.9rem; margin: 0;">
+            <strong>Scoring Scale:</strong> 1 = Absent/Not Implemented → 5 = Optimized/Excellent
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
     data_readiness_questions = [
         "An enterprise data catalog exists listing key datasets and owners",
@@ -635,12 +1036,18 @@ with tab2:
         
         st.divider()
     
-    # Save and Reset buttons at the bottom
-    st.divider()
-    col1, col2 = st.columns(2)
+    # Enhanced Save and Reset buttons
+    st.markdown("""
+    <div style="margin: 1rem 0; padding: 1rem; background: rgba(255,255,255,0.95); border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+        <h4 style="color: #1e3c72; margin-bottom: 0.5rem; font-weight: 600;">💾 Save Data Readiness Assessment</h4>
+        <p style="color: #4a5568; margin-bottom: 1rem; font-size: 0.9rem;">Save your Data Readiness assessment to continue with other modules or generate reports.</p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    with col1:
-        if st.button("💾 Save Data Readiness", key="save_data_readiness"):
+    col1, col2, col3 = st.columns([1, 1, 1])
+    
+    with col2:
+        if st.button("💾 Save Data Readiness", key="save_data_readiness", use_container_width=True):
             st.session_state.data_readiness_saved = []
             for i, q in enumerate(data_readiness_questions):
                 score = st.session_state.get(f"data_readiness_{i}", 3)
@@ -650,10 +1057,10 @@ with tab2:
                     "score": score,
                     "notes": notes
                 })
-            st.success("Data Readiness saved!")
+            st.success("✅ Data Readiness assessment saved successfully!")
     
-    with col2:
-        if st.button("🔄 Reset Data Readiness", key="reset_data_readiness"):
+    with col3:
+        if st.button("🔄 Reset Assessment", key="reset_data_readiness", use_container_width=True):
             for i in range(len(data_readiness_questions)):
                 if f"data_readiness_{i}" in st.session_state:
                     del st.session_state[f"data_readiness_{i}"]
@@ -980,7 +1387,17 @@ with tab5:
 
 # ---------------------- Results Tab ----------------------
 with tab6:
-    st.header("📈 Results")
+    st.markdown("""
+    <div class="assessment-card fade-in-up">
+        <h2 style="color: #1e3c72; margin-bottom: 1rem; font-weight: 600; display: flex; align-items: center;">
+            📈 AI Readiness Results & Analysis
+        </h2>
+        <p style="color: #4a5568; margin-bottom: 0.75rem; font-size: 1rem;">
+            Comprehensive assessment results with AI-powered recommendations and actionable insights.
+        </p>
+        <div style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); height: 3px; border-radius: 2px; margin: 0.75rem 0;"></div>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Calculate scores
     scores_data = []
@@ -1003,9 +1420,14 @@ with tab6:
             "Count": len(infra_scores)
         })
     
-    # People - AI Users
+    # People - AI Users (check both saved and current surveys)
     ai_use_scores = []
+    # Check saved surveys
     for survey in st.session_state.people_saved:
+        if survey.get("scores") and survey["type"] == "AI Use (End Users)":
+            ai_use_scores.extend(survey["scores"])
+    # Check current surveys (not yet saved)
+    for survey in st.session_state.people_surveys:
         if survey.get("scores") and survey["type"] == "AI Use (End Users)":
             ai_use_scores.extend(survey["scores"])
     
@@ -1016,9 +1438,14 @@ with tab6:
             "Count": len(ai_use_scores)
         })
     
-    # People - AI Builders
+    # People - AI Builders (check both saved and current surveys)
     ai_build_scores = []
+    # Check saved surveys
     for survey in st.session_state.people_saved:
+        if survey.get("scores") and survey["type"] == "AI Build (Builders)":
+            ai_build_scores.extend(survey["scores"])
+    # Check current surveys (not yet saved)
+    for survey in st.session_state.people_surveys:
         if survey.get("scores") and survey["type"] == "AI Build (Builders)":
             ai_build_scores.extend(survey["scores"])
     
@@ -1029,9 +1456,14 @@ with tab6:
             "Count": len(ai_build_scores)
         })
     
-    # Leadership
+    # Leadership (check both saved and current surveys)
     leadership_scores = []
+    # Check saved surveys
     for survey in st.session_state.leadership_saved:
+        if survey.get("scores"):
+            leadership_scores.extend(survey["scores"])
+    # Check current surveys (not yet saved)
+    for survey in st.session_state.leadership_surveys:
         if survey.get("scores"):
             leadership_scores.extend(survey["scores"])
     
@@ -1053,31 +1485,63 @@ with tab6:
         # Overall score
         overall = scores_df["Avg Score"].mean()
         
-        # Display results
-        col1, col2 = st.columns([2, 1])
+        # Ultra-compact results display
+        col1, col2, col3, col4 = st.columns(4)
         
         with col1:
-            st.markdown(f"**Overall AI Readiness Score: {overall:.2f}/5.00**")
-            st.markdown(f"**Maturity Level:** {maturity_band(overall)}")
+            st.markdown(f"""
+            <div style="background: rgba(255,255,255,0.9); padding: 0.75rem; border-radius: 8px; text-align: center; margin: 0.25rem 0;">
+                <h3 style="color: #1e3c72; margin: 0; font-size: 1.5rem; font-weight: 700;">{overall:.2f}</h3>
+                <p style="color: #4a5568; margin: 0; font-size: 0.8rem;">Overall Score</p>
+            </div>
+            """, unsafe_allow_html=True)
         
         with col2:
-            st.metric("Total Areas Assessed", len(scores_df))
-            st.metric("Average Score", f"{overall:.2f}/5.0")
+            st.markdown(f"""
+            <div style="background: rgba(255,255,255,0.9); padding: 0.75rem; border-radius: 8px; text-align: center; margin: 0.25rem 0;">
+                <h3 style="color: #1e3c72; margin: 0; font-size: 1.5rem; font-weight: 700;">{len(scores_df)}</h3>
+                <p style="color: #4a5568; margin: 0; font-size: 0.8rem;">Areas Assessed</p>
+            </div>
+            """, unsafe_allow_html=True)
         
-        # Radar chart
+        with col3:
+            st.markdown(f"""
+            <div style="background: rgba(255,255,255,0.9); padding: 0.75rem; border-radius: 8px; text-align: center; margin: 0.25rem 0;">
+                <h3 style="color: #1e3c72; margin: 0; font-size: 1.5rem; font-weight: 700;">{maturity_band(overall).split('**')[1].split('**')[0]}</h3>
+                <p style="color: #4a5568; margin: 0; font-size: 0.8rem;">Maturity Level</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col4:
+            st.markdown(f"""
+            <div style="background: rgba(255,255,255,0.9); padding: 0.75rem; border-radius: 8px; text-align: center; margin: 0.25rem 0;">
+                <h3 style="color: #1e3c72; margin: 0; font-size: 1.5rem; font-weight: 700;">{overall/5*100:.0f}%</h3>
+                <p style="color: #4a5568; margin: 0; font-size: 0.8rem;">Readiness</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        # Enhanced Radar Chart - All 4 Dimensions Visible
         if len(scores_df) > 0:
             fig = go.Figure()
             
+            # Add the main radar trace
             fig.add_trace(go.Scatterpolar(
                 r=scores_df["Avg Score"].tolist(),
                 theta=scores_df["Area"].tolist(),
                 fill='toself',
                 name='AI Readiness Score',
-                fillcolor='rgba(0, 123, 255, 0.3)',
-                line_color='rgba(0, 123, 255, 0.8)',
-                line_width=2
+                fillcolor='rgba(102, 126, 234, 0.25)',
+                line_color='rgba(102, 126, 234, 1)',
+                line_width=3,
+                marker=dict(
+                    size=8,
+                    color='rgba(102, 126, 234, 1)',
+                    line=dict(width=2, color='white')
+                ),
+                hovertemplate='<b>%{theta}</b><br>Score: %{r:.2f}/5.0<extra></extra>'
             ))
             
+            # Enhanced layout for better visibility
             fig.update_layout(
                 polar=dict(
                     radialaxis=dict(
@@ -1085,79 +1549,79 @@ with tab6:
                         range=[0, 5],
                         ticktext=['0', '1', '2', '3', '4', '5'],
                         tickvals=[0, 1, 2, 3, 4, 5],
-                        tickfont=dict(size=12),
-                        gridcolor='lightgray',
-                        linecolor='gray'
+                        tickfont=dict(size=12, color='#4a5568'),
+                        gridcolor='rgba(102, 126, 234, 0.2)',
+                        linecolor='rgba(102, 126, 234, 0.3)',
+                        linewidth=1,
+                        showline=True
                     ),
                     angularaxis=dict(
-                        tickfont=dict(size=11),
-                        gridcolor='lightgray'
-                    )
+                        tickfont=dict(size=11, color='#2d3748'),
+                        gridcolor='rgba(102, 126, 234, 0.15)',
+                        linecolor='rgba(102, 126, 234, 0.3)',
+                        linewidth=1,
+                        showline=True,
+                        rotation=0
+                    ),
+                    bgcolor='rgba(255, 255, 255, 0.8)'
                 ),
                 showlegend=False,
-                height=600,
-                width=700,
-                margin=dict(l=50, r=50, t=80, b=50),
-                title=dict(
-                    text="AI Readiness Assessment - Radar Chart",
-                    x=0.5,
-                    font=dict(size=16, color='#333')
-                ),
+                height=450,
+                width=500,
+                margin=dict(l=20, r=20, t=30, b=20),
                 paper_bgcolor='rgba(0,0,0,0)',
-                plot_bgcolor='rgba(0,0,0,0)'
+                plot_bgcolor='rgba(0,0,0,0)',
+                font=dict(family="Inter, sans-serif")
             )
             
-            # Center the chart
-            col1, col2, col3 = st.columns([1, 2, 1])
+            # Add title and center the chart
+            fig.update_layout(
+                title=dict(
+                    text="",
+                    x=0.5,
+                    y=0.98,
+                    font=dict(size=14, color='#1e3c72'),
+                    xanchor='center'
+                )
+            )
+            
+            # Center the chart with better proportions
+            col1, col2, col3 = st.columns([1, 3, 1])
             with col2:
                 st.plotly_chart(fig, use_container_width=True)
         
-        # AI-Powered Recommendations
-        st.subheader("🤖 AI-Powered Recommendations & Use Cases")
+        # Ultra-compact AI Analysis
+        col1, col2 = st.columns([1, 1])
         
-        # Check OpenAI API status
-        client, status = setup_openai()
-        if client:
-            st.success("✅ OpenAI API connected - AI analysis available")
-        else:
-            st.warning(f"⚠️ {status} - Using basic recommendations")
+        with col1:
+            # Check OpenAI API status
+            client, status = setup_openai()
+            if client:
+                st.success("✅ OpenAI API connected")
+            else:
+                st.warning(f"⚠️ {status}")
         
-        # Generate AI analysis for all areas
-        if st.button("🚀 Generate AI Analysis for All Areas"):
-            for _, row in scores_df.iterrows():
-                area = row['Area']
-                score = row['Avg Score']
-                comments = get_section_comments(area)
-                
-                if comments:
-                    ai_analysis = analyze_comments_with_ai(comments, area, score)
+        with col2:
+            if st.button("🚀 Generate AI Analysis", use_container_width=True):
+                for _, row in scores_df.iterrows():
+                    area = row['Area']
+                    score = row['Avg Score']
+                    comments = get_section_comments(area)
+                    
+                    # Generate AI analysis even if no comments, using score context
+                    context = f"Current score: {score}/5.0. Area: {area}. No specific user comments provided."
+                    ai_analysis = analyze_comments_with_ai(comments or "No specific feedback provided", area, score, context)
                     st.session_state[f"ai_analysis_{area}"] = ai_analysis
-            
-            st.success("AI analysis generated for all areas!")
-            st.rerun()
+                
+                st.success("✅ AI analysis generated!")
+                st.rerun()
         
-        # Display AI analysis for each area
+        # Compact AI analysis display
         for _, row in scores_df.iterrows():
             area = row['Area']
             score = row['Avg Score']
             
-            with st.expander(f"🤖 {area} (Score: {score:.2f}/5.00)", expanded=False):
-                comments = get_section_comments(area)
-                
-                if comments:
-                    st.markdown("**💬 User Comments:**")
-                    st.info(comments)
-                else:
-                    st.info("No specific comments provided for this area.")
-                    
-                # Generate AI analysis if not already available
-                if f"ai_analysis_{area}" not in st.session_state:
-                    if st.button(f"🧠 Generate AI Analysis for {area}", key=f"ai_generate_{area}"):
-                        context = f"Current score: {score}/5.0. Area: {area}. {'User comments: ' + comments if comments else 'No specific user comments provided.'}"
-                        ai_analysis = analyze_comments_with_ai(comments or "No specific feedback provided", area, score, context)
-                        st.session_state[f"ai_analysis_{area}"] = ai_analysis
-                        st.rerun()
-                
+            with st.expander(f"🤖 {area} ({score:.2f}/5.00)", expanded=False):
                 # Display AI analysis if available
                 if f"ai_analysis_{area}" in st.session_state:
                     ai_analysis = st.session_state[f"ai_analysis_{area}"]
@@ -1169,35 +1633,35 @@ with tab6:
                         "Low": "🟢"
                     }.get(ai_analysis.get("priority", "Medium"), "🟡")
                     
-                    st.markdown(f"**{priority_color} Priority Level:** {ai_analysis.get('priority', 'Medium')}")
+                    st.markdown(f"**{priority_color} Priority:** {ai_analysis.get('priority', 'Medium')}")
                     
-                    # Recommendations
+                    # Recommendations (compact)
                     st.markdown("**💡 Key Recommendations:**")
                     for rec in ai_analysis.get("recommendations", []):
                         st.markdown(f"• {rec}")
                     
-                    # Use Cases
-                    st.markdown("**🎯 Concrete Use Cases:**")
-                    for use_case in ai_analysis.get("use_cases", []):
-                        st.markdown(f"• {use_case}")
-                    
-                    # Next Steps
-                    st.markdown("**🚀 Prioritized Next Steps:**")
-                    for i, step in enumerate(ai_analysis.get("next_steps", []), 1):
+                    # Next Steps (compact)
+                    st.markdown("**🚀 Next Steps:**")
+                    for i, step in enumerate(ai_analysis.get("next_steps", [])[:3], 1):  # Show only first 3
                         st.markdown(f"{i}. {step}")
                     
-                    # Regenerate button
-                    if st.button(f"🔄 Regenerate Analysis for {area}", key=f"ai_regenerate_{area}"):
+                    # Regenerate button (compact)
+                    if st.button(f"🔄 Regenerate", key=f"ai_regenerate_{area}"):
                         del st.session_state[f"ai_analysis_{area}"]
                         st.rerun()
                         
                 else:
-                    st.info(f"No AI analysis generated yet for {area}. Click 'Generate AI Analysis' above to get AI-powered recommendations!")
+                    # Generate AI analysis if not already available
+                    if st.button(f"🧠 Generate Analysis", key=f"ai_generate_{area}"):
+                        context = f"Current score: {score}/5.0. Area: {area}. No specific user comments provided."
+                        ai_analysis = analyze_comments_with_ai("No specific feedback provided", area, score, context)
+                        st.session_state[f"ai_analysis_{area}"] = ai_analysis
+                        st.rerun()
                     
                     # Generate basic recommendations based on score
                     basic_recs = generate_basic_recommendations(area, score)
-                    st.markdown("**📊 Basic Recommendations (Score-based):**")
-                    for rec in basic_recs:
+                    st.markdown("**📊 Basic Recommendations:**")
+                    for rec in basic_recs[:2]:  # Show only first 2
                         st.markdown(f"• {rec}")
     else:
         st.info("📊 No assessment data available yet. Complete surveys in other tabs to see results here.")
@@ -1208,71 +1672,74 @@ with tab6:
         st.markdown("• 👥 **People** - Survey team members")
         st.markdown("• 🎯 **Leadership & Strategy** - Assess leadership readiness")
 
-    st.divider()
-    st.markdown("### Exports")
-    
+    # Ultra-compact Exports section
     if scores_df is not None:
-        export_csv(scores_df, "Module Scores")
+        col1, col2 = st.columns(2)
         
-        # Markdown report
-        ts = datetime.now().isoformat()
-        ob = st.session_state.onboarding
-        report_lines = []
-        report_lines.append(f"# IB Analytics — AI Readiness Report\n")
-        report_lines.append(f"**Company:** {ob.get('Company Name','(unspecified)')}  ")
-        report_lines.append(f"**Sector:** {ob.get('Sector','(unspecified)')}  ")
-        report_lines.append(f"**Email:** {ob.get('Email','')}  ")
-        report_lines.append(f"**Phone:** {ob.get('Phone','')}  ")
-        report_lines.append(f"**Date:** {ts}\n")
-        report_lines.append("## Scores")
-        report_lines.append(scores_df.to_markdown(index=False))
-        report_lines.append(f"\n**Overall:** {overall:.2f}/5.00  \n**Maturity:** {maturity_band(overall)}\n")
+        with col1:
+            export_csv(scores_df, "Module Scores")
         
-        # Collect all comments
-        comment_blob = ""
-        for key, value in st.session_state.items():
-            if isinstance(key, str) and key.endswith("_notes") and isinstance(value, str) and value.strip():
-                comment_blob += value.strip() + " "
-        
-        report_lines.append("## AI Summary of Comments")
-        report_lines.append(summarize_text(comment_blob, max_sentences=8) or "_No comments provided._")
-        report_lines.append("\n## AI-Powered Recommendations")
-        
-        for _, row in scores_df.iterrows():
-            area = row['Area']
-            score = row['Avg Score']
+        with col2:
+            # Markdown report
+            ts = datetime.now().isoformat()
+            ob = st.session_state.onboarding
+            report_lines = []
+            report_lines.append(f"# IB Analytics — AI Readiness Report\n")
+            report_lines.append(f"**Company:** {ob.get('Company Name','(unspecified)')}  ")
+            report_lines.append(f"**Sector:** {ob.get('Sector','(unspecified)')}  ")
+            report_lines.append(f"**Email:** {ob.get('Email','')}  ")
+            report_lines.append(f"**Phone:** {ob.get('Phone','')}  ")
+            report_lines.append(f"**Date:** {ts}\n")
+            report_lines.append("## Scores")
+            report_lines.append(scores_df.to_markdown(index=False))
+            report_lines.append(f"\n**Overall:** {overall:.2f}/5.00  \n**Maturity:** {maturity_band(overall)}\n")
             
-            # Check if AI analysis exists
-            if f"ai_analysis_{area}" in st.session_state:
-                ai_analysis = st.session_state[f"ai_analysis_{area}"]
-                report_lines.append(f"\n### {area} (Score: {score:.2f}/5.00)")
-                report_lines.append(f"**Priority:** {ai_analysis.get('priority', 'Medium')}")
+            # Collect all comments
+            comment_blob = ""
+            for key, value in st.session_state.items():
+                if isinstance(key, str) and key.endswith("_notes") and isinstance(value, str) and value.strip():
+                    comment_blob += value.strip() + " "
+            
+            report_lines.append("## AI Summary of Comments")
+            report_lines.append(summarize_text(comment_blob, max_sentences=8) or "_No comments provided._")
+            report_lines.append("\n## AI-Powered Recommendations")
+            
+            for _, row in scores_df.iterrows():
+                area = row['Area']
+                score = row['Avg Score']
                 
-                report_lines.append("\n**Key Recommendations:**")
-                for rec in ai_analysis.get("recommendations", []):
-                    report_lines.append(f"- {rec}")
-                
-                report_lines.append("\n**Concrete Use Cases:**")
-                for use_case in ai_analysis.get("use_cases", []):
-                    report_lines.append(f"- {use_case}")
-                
-                report_lines.append("\n**Next Steps:**")
-                for i, step in enumerate(ai_analysis.get("next_steps", []), 1):
-                    report_lines.append(f"{i}. {step}")
-            else:
-                # Fallback to basic recommendations
-                basic_recs = generate_basic_recommendations(area, score)
-                report_lines.append(f"\n### {area} (Score: {score:.2f}/5.00)")
-                report_lines.append("**Basic Recommendations:**")
-                for rec in basic_recs:
-                    report_lines.append(f"- {rec}")
-        
-        st.download_button(
-            "Download Report (Markdown)",
-            "\n".join(report_lines).encode("utf-8"),
-            file_name="ib_analytics_ai_readiness_report.md",
-            mime="text/markdown",
-        )
+                # Check if AI analysis exists
+                if f"ai_analysis_{area}" in st.session_state:
+                    ai_analysis = st.session_state[f"ai_analysis_{area}"]
+                    report_lines.append(f"\n### {area} (Score: {score:.2f}/5.00)")
+                    report_lines.append(f"**Priority:** {ai_analysis.get('priority', 'Medium')}")
+                    
+                    report_lines.append("\n**Key Recommendations:**")
+                    for rec in ai_analysis.get("recommendations", []):
+                        report_lines.append(f"- {rec}")
+                    
+                    report_lines.append("\n**Concrete Use Cases:**")
+                    for use_case in ai_analysis.get("use_cases", []):
+                        report_lines.append(f"- {use_case}")
+                    
+                    report_lines.append("\n**Next Steps:**")
+                    for i, step in enumerate(ai_analysis.get("next_steps", []), 1):
+                        report_lines.append(f"{i}. {step}")
+                else:
+                    # Fallback to basic recommendations
+                    basic_recs = generate_basic_recommendations(area, score)
+                    report_lines.append(f"\n### {area} (Score: {score:.2f}/5.00)")
+                    report_lines.append("**Basic Recommendations:**")
+                    for rec in basic_recs:
+                        report_lines.append(f"- {rec}")
+            
+            st.download_button(
+                "📊 Download Report",
+                "\n".join(report_lines).encode("utf-8"),
+                file_name="ai_readiness_report.md",
+                mime="text/markdown",
+                use_container_width=True
+            )
     else:
         st.info("📄 Complete assessments to generate downloadable reports")
 
