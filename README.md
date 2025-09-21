@@ -22,16 +22,20 @@ A comprehensive Streamlit application for assessing organizational AI readiness 
 
 3. **Set up OpenAI API key** (for AI-powered recommendations):
    
-   **Option A: Using .env file (Recommended)**
+   **Using Streamlit secrets (Recommended)**
    
-   Create a `.env` file in the project root directory:
+   Create a `.streamlit/secrets.toml` file in the project root directory:
    ```
-   OPENAI_API_KEY=your_actual_openai_api_key_here
+   [secrets]
+   OPENAI_API_KEY = "your_actual_openai_api_key_here"
+   
+   # Optional: Other configuration variables
+   OPENAI_MODEL = "gpt-4o"
+   OPENAI_MAX_TOKENS = 1000
+   OPENAI_TEMPERATURE = 0.7
    ```
    
-   **Option B: Manual input in the app**
-   
-   You can also enter your API key directly in the app's sidebar, but using a .env file is more secure.
+   **Note**: The app will work without the API key but won't provide AI-powered recommendations.
 
 4. **Run the application**:
    ```bash
@@ -43,6 +47,7 @@ A comprehensive Streamlit application for assessing organizational AI readiness 
 ### 1. Onboarding
 - Enter company information and context
 - Add general notes about goals and constraints
+- Save onboarding information using the save button
 
 ### 2. Data Readiness Assessment
 - Evaluate data inventory, digitization, and governance
@@ -74,22 +79,23 @@ A comprehensive Streamlit application for assessing organizational AI readiness 
 
 - `app.py` - Main Streamlit application
 - `requirements.txt` - Python dependencies
-- `.env` - Environment variables (create this file with your API key)
-- `env_example.txt` - Template for environment variables
+- `.streamlit/secrets.toml` - Streamlit secrets configuration (create this file with your API key)
+- `env_example.txt` - Template for environment variables (legacy)
 
 ## Security Notes
 
-- **Never commit your .env file** to version control
-- The .env file is automatically ignored by git
+- **Never commit your secrets.toml file** to version control
+- The secrets.toml file is automatically ignored by git
 - API keys are stored securely and not logged
-- Fallback manual input is available but less secure
+- App works without API key but won't provide AI recommendations
 
 ## Troubleshooting
 
 ### OpenAI API Issues
 - Ensure your API key is valid and has sufficient credits
-- Check that the .env file is in the correct location
+- Check that the `.streamlit/secrets.toml` file is in the correct location
 - Verify the API key format (starts with "sk-")
+- Ensure the secrets.toml file has proper TOML format
 
 ### Dependencies Issues
 - Update pip: `python -m pip install --upgrade pip`
@@ -103,6 +109,6 @@ A comprehensive Streamlit application for assessing organizational AI readiness 
 
 For issues or questions, please check:
 1. Dependencies are correctly installed
-2. .env file is properly configured
+2. `.streamlit/secrets.toml` file is properly configured
 3. OpenAI API key is valid and active
 4. No firewall or network restrictions blocking API calls
