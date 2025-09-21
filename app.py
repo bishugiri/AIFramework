@@ -3,12 +3,11 @@ from datetime import datetime
 import os
 from typing import Dict, List, Tuple, Optional
 
-# Load environment variables from .env file
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ImportError:
-    pass
+# Load OpenAI API key from Streamlit secrets
+def get_openai_api_key():
+    """Get OpenAI API key from Streamlit secrets"""
+    return st.secrets.get("OPENAI_API_KEY", "")
+
 
 import openai
 import numpy as np
@@ -119,8 +118,8 @@ def load_from_json(filename):
 
 # ---------------------- OpenAI Integration ----------------------
 def setup_openai():
-    """Setup OpenAI client with API key from environment variables"""
-    api_key = os.getenv("OPENAI_API_KEY")
+    """Setup OpenAI client with API key from Streamlit secrets"""
+    api_key = get_openai_api_key()
     if not api_key or api_key == "your_openai_api_key_here":
         return None, "API key not found or placeholder detected"
     
@@ -164,7 +163,7 @@ def analyze_comments_with_ai(comments: str, area: str, score: float, context: st
             "priority": "High/Medium/Low"
         }}
         
-        Focus on practical, implementable advice for improving AI readiness.
+        Focus on practical, implementable advice for improving AI readiness. Use knowledge from what market is currently adopting
         """
         
         response = client.chat.completions.create(
@@ -547,6 +546,24 @@ with tab1:
         st.session_state.onboarding["Website"] = st.text_input("Website (optional)", value=st.session_state.onboarding.get("Website", ""))
     
     st.text_area("General Notes (optional)", value=st.session_state.onboarding.get("onboarding_notes", ""), key="onboarding_notes", placeholder="Context, goals, constraints…")
+    
+    # Save and Reset buttons
+    st.divider()
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        if st.button("💾 Save Onboarding Info", key="save_onboarding"):
+            # Update onboarding notes in session state
+            if "onboarding_notes" in st.session_state:
+                st.session_state.onboarding["onboarding_notes"] = st.session_state["onboarding_notes"]
+            st.success("Onboarding information saved!")
+    
+    with col2:
+        if st.button("🔄 Reset Onboarding", key="reset_onboarding"):
+            st.session_state.onboarding = {}
+            if "onboarding_notes" in st.session_state:
+                del st.session_state["onboarding_notes"]
+            st.rerun()
 
 # ---------------------- Data Readiness Tab ----------------------
 with tab2:
@@ -1130,13 +1147,16 @@ with tab6:
                 if comments:
                     st.markdown("**💬 User Comments:**")
                     st.info(comments)
+                else:
+                    st.info("No specific comments provided for this area.")
                     
-                    # Generate AI analysis if not already available
-                    if f"ai_analysis_{area}" not in st.session_state:
-                        if st.button(f"🧠 Generate AI Analysis for {area}", key=f"ai_generate_{area}"):
-                            ai_analysis = analyze_comments_with_ai(comments, area, score)
-                            st.session_state[f"ai_analysis_{area}"] = ai_analysis
-                            st.rerun()
+                # Generate AI analysis if not already available
+                if f"ai_analysis_{area}" not in st.session_state:
+                    if st.button(f"🧠 Generate AI Analysis for {area}", key=f"ai_generate_{area}"):
+                        context = f"Current score: {score}/5.0. Area: {area}. {'User comments: ' + comments if comments else 'No specific user comments provided.'}"
+                        ai_analysis = analyze_comments_with_ai(comments or "No specific feedback provided", area, score, context)
+                        st.session_state[f"ai_analysis_{area}"] = ai_analysis
+                        st.rerun()
                 
                 # Display AI analysis if available
                 if f"ai_analysis_{area}" in st.session_state:
@@ -1172,7 +1192,7 @@ with tab6:
                         st.rerun()
                         
                 else:
-                    st.info(f"No user comments found for {area}. Add some feedback to get AI-powered recommendations!")
+                    st.info(f"No AI analysis generated yet for {area}. Click 'Generate AI Analysis' above to get AI-powered recommendations!")
                     
                     # Generate basic recommendations based on score
                     basic_recs = generate_basic_recommendations(area, score)
